@@ -25,7 +25,7 @@ export function Sidebar({ className }: SidebarProps) {
       items: [
         { icon: BookOpen, label: "Dashboard", href: "/student/dashboard" },
         { icon: BookOpen, label: "Schools", href: "/student/dashboard/schools" },
-        { icon: Briefcase, label: "Job Board", href: "/student/dashboard/job-board" },
+        { icon: Briefcase, label: "All Courses", href: "/student/dashboard/all-courses" },
         { icon: MessageSquare, label: "Messages", href: "/student/dashboard/messages" },
         { icon: User, label: "Profile", href: "/student/dashboard/profile" },
       ],

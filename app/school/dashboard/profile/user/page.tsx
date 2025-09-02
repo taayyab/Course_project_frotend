@@ -7,6 +7,7 @@ import { Button } from "@/components/admin/ui/button";
 import { CourseCard } from "@/components/institute/course-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/institute/ui/avatar";
 import { getSchoolProfile } from "@/lib/school.api";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null);
@@ -20,7 +21,7 @@ export default function ProfilePage() {
     const response = await getSchoolProfile(token!);
     if (response.success) {
         console.log("Profile response:", response.data);
-      setProfile(response.data.payload);
+      setProfile(response.data.payload.profile);
     }
   };
 
@@ -57,7 +58,9 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
-              <Button className="rounded-lg">Edit</Button>
+                <Link href="/school/dashboard/profile">
+
+              <Button className="rounded-lg cursor-pointer">Edit</Button></Link>
             </div>
           </CardContent>
         </Card>
@@ -87,7 +90,7 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        <div className="mt-6 flex items-center justify-between">
+        {/* <div className="mt-6 flex items-center justify-between">
           <div className="font-semibold text-[#1e242c]">
             Explore best courses{" "}
             <span className="text-[#0a60ff]">{profile?.stats?.totalCourses || 0}</span>
@@ -98,15 +101,15 @@ export default function ProfilePage() {
           >
             View ALL
           </Button>
-        </div>
+        </div> */}
 
-        <div className="mt-3 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* <div className="mt-3 grid grid-cols-1 gap-6 lg:grid-cols-2">
           {profile?.courses?.length
             ? profile.courses.map((course: any, i: number) => (
                 <CourseCard key={i} course={course} />
               ))
             : [<CourseCard key="placeholder1" />, <CourseCard key="placeholder2" />]}
-        </div>
+        </div> */}
       </div>
     </AppShell>
   );

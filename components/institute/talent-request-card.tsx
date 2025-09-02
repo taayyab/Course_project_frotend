@@ -1,89 +1,73 @@
 "use client"
 
-import { Badge } from "@/components/admin/ui/badge"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/admin/ui/card"
-import { Button } from "@/components/admin/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/admin/ui/dialog"
-
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import type { Job } from "@/lib/school.api"
 import { useState } from "react"
+import { JobDetailsModal } from "./job-details.modal"
+import { MapPin } from "lucide-react"
 
-export type TalentRequest = {
-  id: string
-  title: string
-  company: string
-  tags: string[]
-  applicants: number
-  priority: "High" | "Medium" | "Low"
-  posted: string
+interface TalentRequestCardProps {
+  job: Job
 }
 
-export function TalentRequestCard({ item }: { item: TalentRequest }) {
-  const [open, setOpen] = useState(false)
+export function TalentRequestCard({ job }: TalentRequestCardProps) {
+  const [showDetails, setShowDetails] = useState(false)
+
+  const getTimeAgo = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+
+    if (diffInHours < 24) {
+      return `${diffInHours} hours ago`
+    } else {
+      const diffInDays = Math.floor(diffInHours / 24)
+      return `${diffInDays} days ago`
+    }
+  }
+
   return (
     <>
       <Card className="shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div>
-              <CardTitle className="text-[#1e242c]">{item.title}</CardTitle>
-              <div className="text-sm text-[#696984]">{item.company}</div>
+              <CardTitle className="text-[#1e242c]">{job.jobTitle}</CardTitle>
+              <div className="text-sm text-[#696984]">{job.department}</div>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="rounded-full bg-white ring-1 ring-[#e6e8ee] text-[#3f3f3f]">
-                {item.applicants} Applicants
-              </Badge>
-              <Badge variant="secondary" className="rounded-full bg-white ring-1 ring-[#e6e8ee] text-[#3f3f3f]">
-                {item.priority} Priority
+                {job.employmentType}
               </Badge>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-2">
-            {item.tags.map((t) => (
-              <Badge key={t} variant="secondary" className="rounded-full bg-[#eef5ff] text-[#0a60ff]">
-                {t}
-              </Badge>
-            ))}
+          <div className="space-y-3">
+            <div className="flex items-center gap-4 text-sm text-[#696984]">
+              <div className="flex items-center gap-1">
+                <MapPin className="h-4 w-4" />
+                <span>{job.location}</span>
+              </div>
+            </div>
+
+            <div className="mt-4 h-px w-full bg-[#eef0f4]" />
+            <div className="mt-3 text-sm text-[#696984]">Posted {getTimeAgo(job.createdAt)}</div>
           </div>
-          <div className="mt-4 h-px w-full bg-[#eef0f4]" />
-          <div className="mt-3 text-sm text-[#696984]">Posted {item.posted} ago</div>
         </CardContent>
         <CardFooter className="justify-end gap-3">
           <Button variant="secondary" className="rounded-full bg-[#eef5ff] text-[#0a60ff]">
             Match Students
           </Button>
-          <Button className="rounded-full" onClick={() => setOpen(true)}>
+          <Button className="rounded-full" onClick={() => setShowDetails(true)}>
             View Details
           </Button>
         </CardFooter>
       </Card>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{item.title} – Details</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3 text-sm text-[#3f3f3f]">
-            <p className="text-[#696984]">{item.company}</p>
-            <div className="flex flex-wrap gap-2">
-              {item.tags.map((t) => (
-                <Badge key={t} variant="secondary" className="rounded-full bg-[#eef5ff] text-[#0a60ff]">
-                  {t}
-                </Badge>
-              ))}
-            </div>
-            <ul className="list-disc pl-5">
-              <li>Applicants: {item.applicants}</li>
-              <li>Priority: {item.priority}</li>
-              <li>Posted: {item.posted} ago</li>
-            </ul>
-            <div className="rounded-lg bg-[#f6f8ff] p-3 text-[#1e242c]">
-              This modal mirrors the “Talent Request – View Details” concept in your Employer page design.
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <JobDetailsModal job={job} open={showDetails} onOpenChange={setShowDetails} />
     </>
   )
 }

@@ -11,7 +11,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 
 const nav = [
   { href: "/school/dashboard", label: "Dashboard", icon: Home },
-  { href: "/school/dashboard/analytics", label: "Analytics", icon: ChartBar },
   { href: "/school/dashboard/student", label: "Student", icon: Users },
   { href: "/school/dashboard/employers", label: "Employers", icon: Briefcase },
   { href: "/school/dashboard/courses", label: "Courses", icon: BookOpen },

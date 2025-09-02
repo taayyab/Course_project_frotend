@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const API_BASE_URL = "http://localhost:4000"
+export const API_BASE_URL = "https://talnet-bridge.vercel.app"
 
 export const signup = async (role: string, fullName: string, email: string, phone: string, password: string) => {
   try {

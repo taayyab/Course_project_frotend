@@ -316,3 +316,25 @@ export const getDashboardAnalytics = async () => {
     return null;
   }
 };
+
+
+export const sendContactEmail = async (params: {
+  email: string;
+  name: string;
+  subject: string;
+  text: string;
+  html: string;
+}) => {
+  const token = localStorage.getItem("token") || "";
+  try {
+    const res = await axios.post(`${API_BASE_URL}/api/v1/email/contact`, params, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return res.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
+};

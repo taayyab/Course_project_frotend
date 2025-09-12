@@ -47,6 +47,8 @@ function AppSidebar() {
         <SidebarLink href="/employer/dashboard" active={link("/dashboard")} icon={<Home className="h-4 w-4 cursor-pointer " />} label="Dashboard" />
         <SidebarLink href="/employer/talent-discovery" active={link("/talent-discovery")} icon={<Layers className="h-4 w-4 cursor-pointer" />} label="Talent Discovery" />
         <SidebarLink href="/employer/job-posts" active={link("/job-posts")} icon={<Briefcase className="h-4 w-4 cursor-pointer" />} label="Job Posts" />
+        <SidebarLink href="/employer/message" active={link("/message")} icon={<Briefcase className="h-4 w-4 cursor-pointer" />} label="message" />
+
         <SidebarLink href="/employer/notifications" active={pathname?.startsWith("/notifications") || false} icon={<Bell className="h-4 w-4 cursor-pointer" />} label="Notifications" />
       </nav>
 

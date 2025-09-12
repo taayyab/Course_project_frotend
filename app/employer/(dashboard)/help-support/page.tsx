@@ -1,11 +1,11 @@
 "use client"
-import { Card, CardContent } from "@/components/student/dashboard/ui/card"
-import { Button } from "@/components/student/dashboard/ui/button"
-import { Input } from "@/components/student/dashboard/ui/input"
-import { Textarea } from "@/components/student/dashboard/ui/textarea"
+import { Card, CardContent } from "@/components/employer/ui/card"
+import { Button } from "@/components/employer/ui/button"
+import { Input } from "@/components/employer/ui/input"
+import { Textarea } from "@/components/employer/ui/textarea"
 import { Mail, Phone, MessageCircle } from "lucide-react"
 import { useState } from "react";
-import { sendContactEmail } from "@/lib/student.api";
+import { sendContactEmail } from "@/lib/employer.api";
 
 export default function HelpSupportPage() {
   const [form, setForm] = useState({

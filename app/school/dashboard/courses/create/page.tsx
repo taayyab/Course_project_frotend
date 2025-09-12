@@ -11,13 +11,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { createCourse } from "@/lib/school.api";
-import { useAuth } from "@/context/AuthContext"; // Add this import
+import { useAuth } from "@/context/AuthContext";
 
 export default function CreateCoursePage() {
   const router = useRouter();
-const { token } = useAuth();
+  const { token } = useAuth();
+
   // Form state
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [instructorImage, setInstructorImage] = useState<File | null>(null); // NEW FIELD
   const [title, setTitle] = useState("");
   const [instructor, setInstructor] = useState("");
   const [duration, setDuration] = useState("");
@@ -42,13 +44,14 @@ const { token } = useAuth();
   };
 
   const handleSubmit = async () => {
-    if (!title || !instructor || !duration || !price || !coverImage) {
-      alert("Please fill all required fields and upload a cover image");
+    if (!title || !instructor || !duration || !price || !coverImage || !instructorImage) {
+      alert("Please fill all required fields and upload images");
       return;
     }
 
     const formData = new FormData();
     formData.append("coverImage", coverImage);
+    formData.append("instructorImage", instructorImage); // NEW FIELD
     formData.append("title", title);
     formData.append("instructor", instructor);
     formData.append("duration", duration);
@@ -59,7 +62,7 @@ const { token } = useAuth();
     formData.append("category", category);
     objectives.forEach((obj) => formData.append("objectives[]", obj));
     skills.forEach((skill) => formData.append("skills[]", skill));
-console.log("Token before createCourse:", token);
+    console.log("Token before createCourse:", token);
 
     const response = await createCourse(formData, token);
     console.log("Create course result:", response);
@@ -91,6 +94,12 @@ console.log("Token before createCourse:", token);
             <div>
               <label className="mb-1 block text-sm font-medium text-[#3f3f3f]">Course Cover Image *</label>
               <Input type="file" accept="image/*" onChange={(e) => setCoverImage(e.target.files?.[0] || null)} />
+            </div>
+
+            {/* Instructor Image Field */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-[#3f3f3f]">Instructor Image *</label>
+              <Input type="file" accept="image/*" onChange={(e) => setInstructorImage(e.target.files?.[0] || null)} />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">

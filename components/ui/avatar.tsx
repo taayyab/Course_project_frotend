@@ -36,8 +36,11 @@ function AvatarImage({
 
 function AvatarFallback({
   className,
+  student,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback> & {
+  student: { name?: string } // Make name optional
+}) {
   return (
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
@@ -46,7 +49,15 @@ function AvatarFallback({
         className
       )}
       {...props}
-    />
+    >
+      {student.name
+        ? student.name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+        : "N/A"}
+    </AvatarPrimitive.Fallback>
   )
 }
 

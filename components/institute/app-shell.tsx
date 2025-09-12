@@ -14,6 +14,7 @@ const nav = [
   { href: "/school/dashboard/student", label: "Student", icon: Users },
   { href: "/school/dashboard/employers", label: "Employers", icon: Briefcase },
   { href: "/school/dashboard/courses", label: "Courses", icon: BookOpen },
+  { href: "/school/dashboard/message", label: "Messages", icon: BookOpen },
   { href: "/school/dashboard/help-support", label: "Help & Support", icon: HelpCircle },
   { href: "/school/dashboard/profile/user", label: "Profile", icon: User },
 ]

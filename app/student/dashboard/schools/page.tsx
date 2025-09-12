@@ -31,7 +31,7 @@ export default function SchoolsPage() {
         category: categoryFilter,
       })
 
-      setSchools(response.payload.data ?? [])
+  setSchools(response.payload.data ?? [])
       setTotalPages(response.payload.pagination.page ?? 1)
       setTotal(response.payload.pagination.total ?? 0)
     } catch (error) {
@@ -173,6 +173,21 @@ export default function SchoolsPage() {
                 <Link href={`/student/dashboard/courses?providerId=${school._id}`}>
                   <Button className="w-full bg-blue-600 hover:bg-blue-700 cursor-pointer">View Courses</Button>
                 </Link>
+                <Button
+                  className="w-full mt-2 bg-green-600 hover:bg-green-700 cursor-pointer"
+                  onClick={async () => {
+                    try {
+                      // Start DM with school using school._id as targetUserId
+                      const { chatApiService } = await import("@/lib/chat.api")
+                      await chatApiService.startConversation(school._id)
+                      window.location.href = "/student/dashboard/messages" // Redirect to messages page
+                    } catch (err) {
+                      alert("Failed to contact school. Please try again.")
+                    }
+                  }}
+                >
+                  Contact School
+                </Button>
               </CardContent>
             </Card>
           ))}

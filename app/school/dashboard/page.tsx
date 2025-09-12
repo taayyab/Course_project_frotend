@@ -18,6 +18,7 @@ interface Analytics {
   activeCourses: number;
 }
 
+
 export default function Page() {
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -56,7 +57,7 @@ export default function Page() {
               <StatCard
                 icon={<Users className="h-4 w-4 text-[#0755e9]" />}
                 label="totalEnrollments"
-                value={analytics.totalEnrollments.toString()}
+                value={analytics.totalEnrollments?.toString()}
                 delta="+12% from last month"
               />
               <StatCard
@@ -68,14 +69,14 @@ export default function Page() {
               <StatCard
                 icon={<CalendarClock className="h-4 w-4 text-[#0755e9]" />}
                 label="totalRevenue"
-                value={analytics.totalRevenue.toFixed(2)}
+                value={analytics.totalRevenue?.toFixed(2)}
                 delta="-5% from last month"
                 deltaColor="#f13e3e"
               />
               <StatCard
                 icon={<BarChart3 className="h-4 w-4 text-[#0755e9]" />}
                 label="activeCourses"
-                value={analytics.activeCourses.toString()}
+                value={analytics.activeCourses?.toString()}
                 delta="+4% from last month"
               />
             </>

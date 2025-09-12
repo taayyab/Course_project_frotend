@@ -20,26 +20,40 @@ export default function AuthForm({ role, type }: AuthFormProps) {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
       if (type === "signup") {
-        await signup(role, fullName, email, phone, password); // <-- use fullName
+        await signup(role, fullName, email, phone, password);
         router.push(`/${role}/dashboard`);
       } else {
-        const data = await signin(email, password); // <-- remove role
-        console.log("Response success", data)
-        login(data.data.payload.accessToken, data.data.payload.user); // Assuming data.user contains user info
-        console.log("Response of the api at Auth Form", data)
-        const userRole = data.data.payload.user?.role || role; // Safely access role, fallback to prop if not found
-        router.push(`/${userRole}/dashboard`); // Redirect based on the user's actual role
+        const data = await signin(email, password);
+        login(data.data.payload.accessToken, data.data.payload.user);
+        const userRole = data.data.payload.user?.role || role;
+        router.push(`/${userRole}/dashboard`);
       }
     } catch (err: any) {
-      setError(err.message);
+      // Error handling for wrong credentials or email already exists
+      if (err?.response?.data?.message) {
+        const msg = err.response.data.message.toLowerCase();
+        if (msg.includes("invalid") || msg.includes("wrong") || msg.includes("credentials")) {
+          setError("Incorrect email or password.");
+        } else if (msg.includes("exists")) {
+          setError("Email already exists. Please use a different email or sign in.");
+        } else {
+          setError(err.response.data.message);
+        }
+      } else {
+        setError(err.message || "An unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,7 +63,7 @@ export default function AuthForm({ role, type }: AuthFormProps) {
         <CardContent className="p-10">
           <div className="text-center">
             <h1 className="text-2xl font-semibold text-[#1e242c]">TalentBridge</h1>
-            <p className="text-[#696984]">
+            <p className="text-[#696984] cursor-pointer">
               {role.charAt(0).toUpperCase() + role.slice(1)}{" "}
               {type === "signup" ? "Sign Up" : "Sign In"}
             </p>
@@ -129,16 +143,27 @@ export default function AuthForm({ role, type }: AuthFormProps) {
 
             <Button
               type="submit"
-              className={`w-full h-12 rounded-lg text-base ${
+              className={`w-full h-12 rounded-lg text-base flex items-center cursor-pointer justify-center ${
                 type === "signup"
                   ? "bg-blue-500 hover:bg-blue-600"
                   : "bg-blue-500 hover:bg-blue-600"
               }`}
+              disabled={loading}
             >
-              {type === "signup" ? "Sign Up" : "Sign In"}
+              {loading ? (
+                <span className="flex items-center gap-2 justify-center">
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                  Loading...
+                </span>
+              ) : (
+                type === "signup" ? "Sign Up" : "Sign In"
+              )}
             </Button>
 
-            <div className="text-center text-sm">
+            <div className="text-center text-sm cursor-pointer">
               {type === "signup" ? (
                 <>
                   Already have an account?{" "}

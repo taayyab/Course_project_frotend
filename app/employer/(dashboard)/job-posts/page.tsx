@@ -28,6 +28,7 @@ interface Job {
 export default function JobPostsPage() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -42,6 +43,11 @@ export default function JobPostsPage() {
     }
     fetchJobs()
   }, [])
+
+  useEffect(() => { setMounted(true); }, []);
+
+  // Only render after mount and loading is complete
+  if (!mounted || loading) return null;
 
   return (
     <div className="pt-6">
@@ -59,64 +65,61 @@ export default function JobPostsPage() {
         </CardHeader>
 
         <CardContent className="grid gap-5 md:grid-cols-2">
-          {loading ? (
-            <p className="text-[#696984]">Loading jobs...</p>
-          ) : jobs.length === 0 ? (
+          {jobs.length === 0 && (
             <p className="text-[#696984]">No job posts found.</p>
-          ) : (
-            jobs.map((j) => (
-              <Card key={j._id} className="border-[#e6e7ef]">
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between">
-                    <div className="font-semibold">{j.jobTitle}</div>
-                    <Badge
-                      variant="secondary"
-                      className={
-                        j.status.toLowerCase() === "active"
-                          ? "bg-[#eef4ff] text-[#0f5ff2]"
-                          : "bg-[#fff5e6] text-[#ff9500]"
-                      }
-                    >
-                      {j.status}
-                    </Badge>
-                  </div>
-                  <p className="mt-2 text-[#5f5f5f]">{j.jobDescription}</p>
-                  <div className="mt-3 grid grid-cols-2 gap-x-6 text-sm">
-                    <div>
-                      <div className="text-[#5f5f5f]">Department</div>
-                      <div className="font-medium">{j.department}</div>
-                    </div>
-                    <div>
-                      <div className="text-[#5f5f5f]">Location</div>
-                      <div className="font-medium inline-flex items-center gap-1">
-                        <MapPin className="h-4 w-4 text-[#0f5ff2]" /> {j.location}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[#5f5f5f]">Employment</div>
-                      <div className="font-medium">{j.employmentType}</div>
-                    </div>
-                    <div>
-                      <div className="text-[#5f5f5f]">Compensation</div>
-                      <div className="font-medium text-[#0f5ff2]">
-                        {j.salary.min.toLocaleString()} - {j.salary.max.toLocaleString()} {j.salary.currency}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center gap-6 text-sm text-[#5f5f5f]">
-                    <span className="inline-flex items-center gap-1">
-                      <Users className="h-4 w-4" /> {/* If API returns applications count, display here */}
-                      0 applications
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <CalendarDays className="h-4 w-4" /> Posted{" "}
-                      {new Date(j.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
           )}
+          {jobs.length > 0 && jobs.map((j) => (
+            <Card key={j._id} className="border-[#e6e7ef]">
+              <CardContent className="p-5">
+                <div className="flex items-start justify-between">
+                  <div className="font-semibold">{j.jobTitle}</div>
+                  <Badge
+                    variant="secondary"
+                    className={
+                      j.status.toLowerCase() === "active"
+                        ? "bg-[#eef4ff] text-[#0f5ff2]"
+                        : "bg-[#fff5e6] text-[#ff9500]"
+                    }
+                  >
+                    {j.status}
+                  </Badge>
+                </div>
+                <p className="mt-2 text-[#5f5f5f]">{j.jobDescription}</p>
+                <div className="mt-3 grid grid-cols-2 gap-x-6 text-sm">
+                  <div>
+                    <div className="text-[#5f5f5f]">Department</div>
+                    <div className="font-medium">{j.department}</div>
+                  </div>
+                  <div>
+                    <div className="text-[#5f5f5f]">Location</div>
+                    <div className="font-medium inline-flex items-center gap-1">
+                      <MapPin className="h-4 w-4 text-[#0f5ff2]" /> {j.location}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[#5f5f5f]">Employment</div>
+                    <div className="font-medium">{j.employmentType}</div>
+                  </div>
+                  <div>
+                    <div className="text-[#5f5f5f]">Compensation</div>
+                    <div className="font-medium text-[#0f5ff2]">
+                      {j.salary.min.toLocaleString()} - {j.salary.max.toLocaleString()} {j.salary.currency}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center gap-6 text-sm text-[#5f5f5f]">
+                  <span className="inline-flex items-center gap-1">
+                    <Users className="h-4 w-4" /> {/* If API returns applications count, display here */}
+                    0 applications
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <CalendarDays className="h-4 w-4" /> Posted{" "}
+                    {new Date(j.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </CardContent>
       </Card>
     </div>

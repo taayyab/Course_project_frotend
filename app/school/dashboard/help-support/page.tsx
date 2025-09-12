@@ -1,66 +1,160 @@
 "use client"
-
+import { Card, CardContent } from "@/components/student/dashboard/ui/card"
+import { Button } from "@/components/student/dashboard/ui/button"
+import { Input } from "@/components/student/dashboard/ui/input"
+import { Textarea } from "@/components/student/dashboard/ui/textarea"
+import { Mail, Phone, MessageCircle } from "lucide-react"
+import { useState } from "react";
+import { sendContactEmail } from "@/lib/school.api";
 import { AppShell } from "@/components/institute/app-shell"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/institute/ui/card"
-import { Button } from "@/components/institute/ui/button"
-import { Input } from "@/components/institute/ui/input"
-import { Textarea } from "@/components/institute/ui/textarea"
-import { Mail, Phone, MessageSquare } from 'lucide-react'
+
 
 export default function HelpSupportPage() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess("");
+    setError("");
+    try {
+      await sendContactEmail({
+        email: form.email,
+        name: form.name,
+        subject: form.subject || "Support Request",
+        text: form.message,
+        html: `<p>${form.message}</p>`,
+      });
+      setSuccess("Your message has been sent successfully.");
+      setForm({ name: "", email: "", subject: "", message: "" });
+    } catch (err: any) {
+      setError("Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AppShell>
-      <div className="px-4 lg:px-8 py-6">
-        <h1 className="text-2xl font-semibold text-[#1e242c]">Help & Support</h1>
-        <p className="mt-1 text-[#696984]">Facilitate industry partnerships and manage employer relationships</p>
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      {/* Header */}
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold text-gray-900">Help & Support</h1>
+        <p className="text-gray-600">Facilitate industry partnerships and manage employer relationships</p>
+      </div>
 
-        <Card className="mt-5 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-[#1e242c]">Support</CardTitle>
-            <CardDescription>If you have any questions or face issues with enrollment, classes, or certificates, we’re here to help</CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-xl border border-[#e6e8ee] p-4">
-              <div className="flex items-center gap-2 text-[#0a60ff]"><Mail className="h-4 w-4" /> Email Support</div>
-              <div className="mt-2 text-sm text-[#696984]">support@trainingschool.com</div>
-            </div>
-            <div className="rounded-xl border border-[#e6e8ee] p-4">
-              <div className="flex items-center gap-2 text-[#ff9800]"><Phone className="h-4 w-4" /> Call Support</div>
-              <div className="mt-2 text-sm text-[#696984]">support@trainingschool.com</div>
-            </div>
-            <div className="rounded-xl border border-[#e6e8ee] p-4">
-              <div className="flex items-center gap-2 text-[#6c8cff]"><MessageSquare className="h-4 w-4" /> Live Chat Support</div>
-              <div className="mt-2 text-sm text-[#696984]">support@trainingschool.com</div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Support Options */}
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-gray-900">Support</h2>
+          <p className="text-gray-600">
+            If you have any questions or face issues with enrollment, classes, or certificates, we're here to help
+          </p>
+        </div>
 
-        <Card className="mt-5 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-[#1e242c]">Need Help? Submit a Support Request</CardTitle>
-            <CardDescription>Fill out the form and we will get back to you within 24 hours</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <label className="mb-1 block text-sm font-medium">Name</label>
-                <Input placeholder="Enter your Full Name" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="text-center p-6">
+            <CardContent className="space-y-4">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto">
+                <Mail className="w-6 h-6 text-blue-600" />
               </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium">Email</label>
-                <Input placeholder="Enter your email address" />
+              <div className="space-y-2">
+                <h3 className="font-semibold text-blue-600">Email Support</h3>
+                <p className="text-sm text-gray-600">support@trainingschool.com</p>
               </div>
-            </div>
-            <div className="mt-4">
-              <label className="mb-1 block text-sm font-medium">Message</label>
-              <Textarea rows={6} placeholder="Describe your question and query" />
-            </div>
-            <div className="mt-4">
-              <Button className="rounded-full px-8">Send</Button>
-            </div>
+            </CardContent>
+          </Card>
+
+          <Card className="text-center p-6">
+            <CardContent className="space-y-4">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto">
+                <Phone className="w-6 h-6 text-orange-600" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold text-orange-600">Call Support</h3>
+                <p className="text-sm text-gray-600">support@trainingschool.com</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="text-center p-6">
+            <CardContent className="space-y-4">
+              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto">
+                <MessageCircle className="w-6 h-6 text-gray-600" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold text-gray-600">Live Chat Support</h3>
+                <p className="text-sm text-gray-600">support@trainingschool.com</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Support Request Form */}
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h2 className="text-lg font-semibold text-gray-900">Need Help? Submit a Support Request</h2>
+          <p className="text-gray-600">Fill out the form and we will get back to you with 24 hours</p>
+        </div>
+
+        <Card>
+          <CardContent className="p-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-sm font-medium text-gray-900">
+                    Name
+                  </label>
+                  <Input id="name" placeholder="Enter your Full Name" className="w-full" value={form.name} onChange={handleChange} />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium text-gray-900">
+                    Email
+                  </label>
+                  <Input id="email" type="email" placeholder="Enter your email address" className="w-full" value={form.email} onChange={handleChange} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="subject" className="text-sm font-medium text-gray-900">
+                  Subject
+                </label>
+                <Input id="subject" placeholder="Subject" className="w-full" value={form.subject} onChange={handleChange} />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="message" className="text-sm font-medium text-gray-900">
+                  Message
+                </label>
+                <Textarea
+                  id="message"
+                  placeholder="Describe your question and query"
+                  className="w-full min-h-[120px] resize-none"
+                  value={form.message}
+                  onChange={handleChange}
+                />
+              </div>
+              {success && <div className="text-green-600 text-sm">{success}</div>}
+              {error && <div className="text-red-600 text-sm">{error}</div>}
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8" type="submit" disabled={loading}>
+                {loading ? "Sending..." : "Send"}
+              </Button>
+            </form>
           </CardContent>
         </Card>
       </div>
+    </div>
     </AppShell>
   )
 }

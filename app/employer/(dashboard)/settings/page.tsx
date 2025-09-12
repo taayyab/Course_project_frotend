@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/employer/ui/card";
 import { Button } from "@/components/employer/ui/button";
 import { Input } from "@/components/employer/ui/input";
 import { Label } from "@/components/employer/ui/label";
 import { cn } from "@/lib/utils";
 import { saveEmployerProfile } from "@/lib/employer.api";
+import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 
 export default function SettingsPage() {
@@ -16,11 +17,36 @@ export default function SettingsPage() {
   const { toast } = useToast();
 
   const [form, setForm] = useState({
-    companyName: "",
+    name: "",
     companySize: "",
     industry: "",
-    website: "",
+    websiteLink: "",
+
   });
+  const [userDetails, setUserDetails] = useState<{ fullName: string; email: string; phone: string; profilePicture?: string } | null>(null);
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://talnet-bridge.vercel.app"}/api/v1/employers/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = res.data.payload;
+        setForm({
+          name: data.name || "",
+          companySize: data.companySize || "",
+          industry: data.industry || "",
+          websiteLink: data.websiteLink || "",
+
+        });
+        setUserDetails(data.userDetails || null);
+      } catch (err) {
+        toast({ title: "Failed to fetch profile", variant: "destructive" });
+      }
+    };
+    fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [loading, setLoading] = useState(false);
   const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
@@ -56,8 +82,8 @@ export default function SettingsPage() {
             <Field label="Company Name">
               <Input
                 placeholder="TechCorp Inc."
-                value={form.companyName}
-                onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
             </Field>
             <Field label="Company Size">
@@ -77,11 +103,24 @@ export default function SettingsPage() {
             <Field label="Website">
               <Input
                 placeholder="https://techcorp.com"
-                value={form.website}
-                onChange={(e) => setForm({ ...form, website: e.target.value })}
+                value={form.websiteLink}
+                onChange={(e) => setForm({ ...form, websiteLink: e.target.value })}
               />
             </Field>
+          
           </div>
+          {userDetails && (
+            <div className="mt-4 p-4 rounded bg-gray-50 border flex items-center gap-4">
+              {userDetails.profilePicture && (
+                <img src={userDetails.profilePicture} alt="Profile" className="w-16 h-16 rounded-full object-cover" />
+              )}
+              <div>
+                <div className="font-semibold">{userDetails.fullName}</div>
+                <div className="text-sm text-gray-600">{userDetails.email}</div>
+                <div className="text-sm text-gray-600">{userDetails.phone}</div>
+              </div>
+            </div>
+          )}
           <Button
             className="w-fit bg-[#0f5ff2] hover:bg-[#0d4fe0]"
             onClick={handleSave}

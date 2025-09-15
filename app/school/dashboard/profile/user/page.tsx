@@ -20,7 +20,6 @@ export default function ProfilePage() {
   const fetchProfile = async () => {
     const response = await getSchoolProfile(token!);
     if (response.success) {
-        console.log("Profile response:", response.data);
       setProfile(response.data.payload.profile);
     }
   };

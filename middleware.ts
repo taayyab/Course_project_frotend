@@ -8,7 +8,8 @@ export function middleware(request: NextRequest) {
   const publicPaths = [
     '/',
     '/school/login', '/school/signup', '/subscribe/payment',
-    '/student/login', '/student/signup', '/subscribe/payment'
+    '/student/login', '/student/signup', '/subscribe/payment',
+    '/employer/login', '/employer/signup'
   ];
   const roleDashboards: { [key: string]: string } = {
     admin: '/admin/dashboard',

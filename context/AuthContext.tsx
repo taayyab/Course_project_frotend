@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     Cookies.set("token", token, { expires: 7});
     Cookies.set("user", userData.role, { expires: 7, path: "/" }); // <-- Add this line
     console.log("Response Data:", userData)
-    console.log("Response Data:", token)
     setToken(token);
     setUser(userData);
   };

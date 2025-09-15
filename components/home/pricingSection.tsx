@@ -45,14 +45,32 @@ export default function PricingSection() {
       buttonStyle: "bg-blue-600 text-white hover:bg-blue-700",
       role: "school",
     },
+    {
+      id: "employer-plan-id",
+      name: "Employers",
+      price: 0,
+      period: "/free",
+      features: [
+        "Post jobs for free",
+        "Browse candidate profiles",
+        "Direct messaging",
+        "Basic analytics",
+        "No payment required",
+        "Instant access",
+      ],
+      buttonText: "Join as Employer",
+      buttonStyle: "bg-green-600 text-white hover:bg-green-700",
+      role: "employer",
+    },
   ];
 
   function handleSubscribe(plan: any) {
     if (plan.role === "student") {
-      // route to student signup
       router.push("/student/signup");
     } else if (plan.role === "school") {
       router.push("/school/signup");
+    } else if (plan.role === "employer") {
+      router.push("/employer/signup");
     }
   }
 

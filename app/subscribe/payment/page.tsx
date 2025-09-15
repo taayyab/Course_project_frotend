@@ -27,6 +27,7 @@ function CheckoutForm({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -53,10 +54,14 @@ function CheckoutForm({
     }
 
     if (result.paymentIntent?.status === "succeeded") {
+      setSuccess(true);
       try {
         // 🔹 Confirm with backend
         await confirmPayment(result.paymentIntent.id, subscriptionId, token!);
-        router.push(`/${role}/dashboard`);
+        // Show success message for 2 seconds before redirecting
+        setTimeout(() => {
+          router.push(`/${role}/dashboard`);
+        }, 2000);
       } catch (err: any) {
         setError(err.message || "Subscription activation failed");
       }
@@ -67,13 +72,32 @@ function CheckoutForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Payment details above the card */}
+      <div className="mb-4 p-4 bg-gray-50 rounded">
+        <h3 className="text-lg font-semibold mb-2">Payment Details</h3>
+        <div className="flex justify-between text-sm mb-1">
+          <span>Plan:</span>
+          <span className="font-medium">{role.charAt(0).toUpperCase() + role.slice(1)}</span>
+        </div>
+        <div className="flex justify-between text-sm mb-1">
+          <span>Amount:</span>
+          <span className="font-medium">£{planPrice}</span>
+        </div>
+        <div className="flex justify-between text-sm mb-1">
+          <span>Status:</span>
+          <span className="font-medium">{success ? "Paid" : "Pending"}</span>
+        </div>
+      </div>
       <div className="p-3 border rounded">
         <CardElement options={{ hidePostalCode: true }} />
       </div>
       {error && <div className="text-red-600 text-sm">{error}</div>}
+      {success && (
+        <div className="text-green-600 text-sm font-semibold text-center mb-2">Payment successful! Redirecting to dashboard...</div>
+      )}
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || success}
         className="w-full py-2 bg-blue-600 text-white rounded"
       >
         {loading ? "Processing..." : `Pay £${planPrice}`}

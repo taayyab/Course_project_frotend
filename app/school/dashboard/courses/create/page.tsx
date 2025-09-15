@@ -62,7 +62,6 @@ export default function CreateCoursePage() {
     formData.append("category", category);
     objectives.forEach((obj) => formData.append("objectives[]", obj));
     skills.forEach((skill) => formData.append("skills[]", skill));
-    console.log("Token before createCourse:", token);
 
     const response = await createCourse(formData, token);
     console.log("Create course result:", response);

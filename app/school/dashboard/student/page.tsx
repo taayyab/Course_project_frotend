@@ -145,6 +145,13 @@ export default function StudentPage() {
     }
   }
 
+  const handleContact = async (targetUserId: string) => {
+    // Call your chatApiService.startConversation or socket logic here
+    // Example:
+    // await chatApiService.startConversation(targetUserId)
+    // ...open chat window, etc.
+  }
+
   const getStatusBadgeClass = (status: Student["status"]) => {
     switch (status) {
       case "enrolled":
@@ -261,6 +268,10 @@ export default function StudentPage() {
                             </SelectContent>
                           </Select>
                         ) : null}
+                        {/* Contact button for every student row */}
+                        <Button size="sm" variant="outline" className="ml-2" onClick={() => handleContact(student.studentId)}>
+                          Contact
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}

@@ -1,3 +1,10 @@
+// Student API service for handling all student-related API calls
+import { API_BASE_URL } from "./auth.api";
+import axios from "axios"
+
+
+
+
 // Send contact email
 export const sendContactEmail = async (params: {
   email: string;
@@ -19,9 +26,6 @@ export const sendContactEmail = async (params: {
     throw error.response?.data || error;
   }
 };
-// Student API service for handling all student-related API calls
-import { API_BASE_URL } from "./auth.api";
-import axios from "axios"
 
 
 // Get auth token from localStorage or wherever you store it

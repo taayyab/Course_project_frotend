@@ -31,7 +31,13 @@ export default function AuthForm({ role, type }: AuthFormProps) {
     try {
       if (type === "signup") {
         await signup(role, fullName, email, phone, password);
-        router.push(`/${role}/dashboard`);
+        // Auto-login immediately to get token (backend signin)
+        const data = await signin(email, password);
+        // signin response shape in your code earlier: data.data.payload.accessToken, data.data.payload.user
+        const accessToken = data.data.payload.accessToken;
+        const user = data.data.payload.user;
+        login(accessToken, user); // save to AuthContext
+        router.push(`/${role}/payment`);
       } else {
         const data = await signin(email, password);
         login(data.data.payload.accessToken, data.data.payload.user);

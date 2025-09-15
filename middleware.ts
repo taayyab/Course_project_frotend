@@ -5,7 +5,11 @@ export function middleware(request: NextRequest) {
   const userRole = request.cookies.get('user')?.value;
   const { pathname } = request.nextUrl;
 
-  const publicPaths = ['/', '/admin/login', '/admin/signup', '/employer/login', '/employer/signup', '/school/login', '/school/signup', '/student/login', '/student/signup'];
+  const publicPaths = [
+    '/',
+    '/school/login', '/school/signup', '/subscribe/payment',
+    '/student/login', '/student/signup', '/subscribe/payment'
+  ];
   const roleDashboards: { [key: string]: string } = {
     admin: '/admin/dashboard',
     employer: '/employer/dashboard',

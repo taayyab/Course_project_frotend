@@ -126,6 +126,14 @@ setJobsPagination(pagination)
     return [...new Set(locations)].filter(Boolean)
   }, [employers])
 
+  // Add this function to the component
+const handleContact = async (targetUserId: string) => {
+  // Call your chatApiService.startConversation or socket logic here
+  // Example:
+  // await chatApiService.startConversation(targetUserId)
+  // ...open chat window, etc.
+}
+
   return (
         <AppShell>
 
@@ -251,16 +259,18 @@ setJobsPagination(pagination)
                         <TableRow key={employer._id}>
                           <TableCell>
                             <div className="font-medium">{employer.company?.name ?? "N/A"}</div>
-                           
                           </TableCell>
                           <TableCell>
                             <div className="font-medium">{employer.company?.website}</div>
                           </TableCell>
                           <TableCell>{employer.industry}</TableCell>
-                          <TableCell>        {employer.size || employer.company?.size || "N/A"}
-</TableCell>
+                          <TableCell>{employer.size || employer.company?.size || "N/A"}</TableCell>
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-2">
+                              {/* Contact button for every employer row */}
+                              <Button size="sm" variant="outline" onClick={() => handleContact(employer._id)}>
+                                Contact
+                              </Button>
                               <Button size="icon" variant="outline" className="rounded-lg bg-transparent">
                                 <MessageSquare className="h-4 w-4" />
                               </Button>

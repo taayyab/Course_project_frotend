@@ -5,9 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/institute
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/institute/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/institute/ui/avatar"
 import { Button } from "@/components/institute/ui/button"
-import { Phone, Video, Info, Send } from 'lucide-react'
+import { Phone, Video, Info, Send ,MessageCircle } from 'lucide-react'
 import { Input } from "@/components/institute/ui/input"
-import { useState } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
+import io from "socket.io-client"
+import { chatApiService, type Message } from "@/lib/chat.api"
 
 type ChatItem = { id: number; from: "me" | "them"; text: string; time: string }
 
@@ -77,6 +79,129 @@ function ChatPane({ title }: { title: string }) {
 }
 
 export default function MessagePage() {
+  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null)
+  const [messageText, setMessageText] = useState("")
+  const [conversations, setConversations] = useState<any[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
+  const [employers, setEmployers] = useState<any[]>([])
+  const [students, setStudents] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const socketRef = useRef<ReturnType<typeof io> | null>(null)
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
+
+  // Connect socket
+  useEffect(() => {
+    if (!token) return
+    const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000", {
+      auth: { token },
+      transports: ["websocket", "polling"],
+      timeout: 20000,
+      forceNew: true,
+    })
+    socketRef.current = socket
+    return () => { socket.disconnect() }
+  }, [token])
+
+  // Fetch employers and students for directory (replace with your API calls)
+  useEffect(() => {
+    // TODO: Replace with real API calls
+    setEmployers([
+      { _id: "emp1", fullName: "Employer One" },
+      { _id: "emp2", fullName: "Employer Two" },
+    ])
+    setStudents([
+      { _id: "stu1", fullName: "Student One" },
+      { _id: "stu2", fullName: "Student Two" },
+    ])
+  }, [])
+
+  // Fetch conversations
+  const fetchConversations = useCallback(async () => {
+    setLoading(true)
+    try {
+      const response = await chatApiService.getConversations()
+      setConversations(response.payload.conversations || [])
+    } catch {
+      setConversations([])
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { fetchConversations() }, [fetchConversations])
+
+  // Fetch messages for selected conversation
+  const fetchMessages = useCallback(async () => {
+    if (!selectedConversationId) return
+    setLoading(true)
+    try {
+      const response = await chatApiService.getAllConversationMessages(selectedConversationId)
+      const mapped = (response.payload.messages || []).map((msg: any) => ({
+        id: msg._id || msg.id,
+        conversationId: msg.conversationId,
+        senderId: msg.sender?._id || msg.senderId,
+        senderType: msg.sender?.role || msg.senderType,
+        message: typeof msg.text === "string" ? msg.text : JSON.stringify(msg.text),
+        timestamp: msg.createdAt || msg.timestamp,
+        status: msg.status || "sent",
+      }))
+      setMessages(mapped)
+    } catch {
+      setMessages([])
+    } finally {
+      setLoading(false)
+    }
+  }, [selectedConversationId])
+
+  useEffect(() => {
+    fetchMessages()
+    if (socketRef.current && selectedConversationId) {
+      socketRef.current.emit("conversation:join", selectedConversationId)
+      socketRef.current.off("message:new")
+      socketRef.current.on("message:new", (data: any) => {
+        setMessages((prev) => [...prev, {
+          id: data.message._id || data.message.id,
+          conversationId: data.message.conversationId,
+          senderId: data.message.sender?._id || data.message.senderId,
+          senderType: data.message.sender?.role || data.message.senderType,
+          message: data.message.message || data.message.text,
+          timestamp: data.message.timestamp || data.message.createdAt,
+          status: data.message.status || "sent",
+        }])
+      })
+    }
+  }, [fetchMessages, selectedConversationId])
+
+  // Start conversation with target user
+  const handleContact = async (targetUserId: string) => {
+    try {
+      const response = await chatApiService.startConversation(targetUserId)
+      const conversationId = response.payload.conversation._id
+      setSelectedConversationId(conversationId)
+      fetchConversations()
+    } catch {
+      // Handle error
+    }
+  }
+
+  // Send message via socket
+  const handleSendMessage = () => {
+    if (!messageText.trim() || !selectedConversationId) return
+    if (socketRef.current) {
+      socketRef.current.emit(
+        "message:send",
+        {
+          conversationId: selectedConversationId,
+          text: messageText,
+        },
+        (response: any) => {
+          if (response.success) setMessageText("")
+        }
+      )
+    }
+  }
+
+  // Layout
   return (
     <AppShell>
       <div className="px-4 lg:px-8 py-6">
@@ -99,7 +224,131 @@ export default function MessagePage() {
             <ChatPane title="Employer" />
           </TabsContent>
         </Tabs>
+
+        <div className="pt-6">
+          <h1 className="text-3xl font-semibold">Messages</h1>
+          <p className="text-muted-foreground mt-1">Contact employers and students</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            {/* Employer Directory */}
+            <Card>
+              <CardHeader>Employers</CardHeader>
+              <CardContent>
+                {employers.map((emp) => (
+                  <div key={emp._id} className="flex items-center justify-between py-2">
+                    <span>{emp.fullName}</span>
+                    <Button size="sm" onClick={() => handleContact(emp._id)}>Contact</Button>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+            {/* Student Directory */}
+            <Card>
+              <CardHeader>Students</CardHeader>
+              <CardContent>
+                {students.map((stu) => (
+                  <div key={stu._id} className="flex items-center justify-between py-2">
+                    <span>{stu.fullName}</span>
+                    <Button size="sm" onClick={() => handleContact(stu._id)}>Contact</Button>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+            {/* Chat Sidebar & Window */}
+            <Card className="col-span-1 md:col-span-1 flex flex-col">
+              <CardHeader>Conversations</CardHeader>
+              <CardContent className="flex-1 p-0">
+                <div className="flex">
+                  {/* Sidebar */}
+                  <div className="w-1/3 border-r pr-2">
+                    {loading ? (
+                      <div>Loading...</div>
+                    ) : conversations.length === 0 ? (
+                      <div className="text-muted-foreground">No conversations yet</div>
+                    ) : (
+                      <div>
+                        {conversations.map((conv: any) => (
+                          <div
+                            key={conv._id}
+                            className={`p-2 cursor-pointer rounded ${selectedConversationId === conv._id ? "bg-muted" : ""}`}
+                            onClick={() => setSelectedConversationId(conv._id)}
+                          >
+                            <div className="font-medium">{
+                              Array.isArray(conv.participantUsers)
+                                ? conv.participantUsers.map((u: any) => typeof u.fullName === "string" ? u.fullName : JSON.stringify(u.fullName)).join(", ")
+                                : typeof conv.participantUsers === "string"
+                                  ? conv.participantUsers
+                                  : JSON.stringify(conv.participantUsers)
+                            }</div>
+                            <div className="text-xs text-muted-foreground">{
+                              typeof conv.lastMessage === "string"
+                                ? conv.lastMessage
+                                : conv.lastMessage
+                                  ? JSON.stringify(conv.lastMessage)
+                                  : "No messages yet"
+                            }</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {/* Chat Window */}
+                  <div className="w-2/3 pl-2 flex flex-col h-[400px]">
+                    <div className="flex-1 overflow-y-auto space-y-4">
+                      {loading ? (
+                        <div>Loading...</div>
+                      ) : messages.length === 0 ? (
+                        <div className="flex items-center justify-center h-full text-muted-foreground">
+                          <MessageCircle className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                          <p>No messages yet</p>
+                        </div>
+                      ) : (
+                        messages.map((message) => (
+                          <MessageBubble key={message.id} message={message} />
+                        ))
+                      )}
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <Input
+                        placeholder="Type your message..."
+                        className="flex-1 border-0 focus-visible:ring-0 bg-transparent"
+                        value={messageText}
+                        onChange={(e) => setMessageText(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === "Enter") handleSendMessage() }}
+                      />
+                      <Button onClick={handleSendMessage} disabled={!messageText.trim()}>
+                        <Send className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </AppShell>
+  )
+}
+
+function MessageBubble({ message }: { message: Message }) {
+  // School sent messages on right, others on left
+  const isFromSchool = message.senderType === "school"
+  const time = new Date(message.timestamp).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+  let content: string | number = ""
+  if (typeof message.message === "string" || typeof message.message === "number") {
+    content = message.message
+  } else {
+    content = JSON.stringify(message.message)
+  }
+  return (
+    <div className={`flex ${isFromSchool ? "justify-end" : "justify-start"}`}>
+      <div className={`max-w-[60%] rounded-lg p-3 ${isFromSchool ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+        <div className="text-sm">{content}</div>
+        <div className={`text-xs mt-1 ${isFromSchool ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{time}</div>
+      </div>
+    </div>
   )
 }

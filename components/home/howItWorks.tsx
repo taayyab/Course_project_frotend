@@ -1,4 +1,5 @@
 import { CheckCircle, BookOpen, Briefcase } from "lucide-react"
+import howitworks from "@/public/howitworks.svg";
 import Image from "next/image"
 export default function HowApprenticeshipsWorks() {
   return (
@@ -84,7 +85,7 @@ export default function HowApprenticeshipsWorks() {
               <div className="relative">
                 <div className="bg-gradient-to-br from-blue-500 to-orange-400 rounded-2xl p-8 max-w-md">
                   <Image
-                    src="/howitworks.svg"
+                    src={howitworks}
                     width={400}
                     height={350}
                     alt="Apprenticeship journey illustration"

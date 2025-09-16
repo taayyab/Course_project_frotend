@@ -2,13 +2,13 @@ import Image from "next/image"
 
 export default function TrustedCompanies() {
   const companies = [
-    { name: "Zapier", logo: "/zapier.png?height=40&width=120" },
-    { name: "Spotify", logo: "/spotify.png?height=40&width=120" },
-    { name: "Zoom", logo: "/zoom.png?height=40&width=120" },
-    { name: "Amazon", logo: "/amazon.png?height=40&width=120" },
-    { name: "Adobe", logo: "/adobe.png?height=40&width=120" },
-    { name: "Notion", logo: "/notion.png?height=40&width=120" },
-    { name: "Netflix", logo: "/netflix.png?height=40&width=120" },
+    { name: "Zapier", logo: "/zapier.png" },
+    { name: "Spotify", logo: "/spotify.png" },
+    { name: "Zoom", logo: "/zoom.png" },
+    { name: "Amazon", logo: "/amazon.png" },
+    { name: "Adobe", logo: "/adobe.png" },
+    { name: "Notion", logo: "/notion.png" },
+    { name: "Netflix", logo: "/netflix.png" },
   ]
 
   return (
@@ -28,8 +28,8 @@ export default function TrustedCompanies() {
             <div key={index} className="flex items-center justify-center">
               <Image
                 src={company.logo || "/placeholder.svg"}
-                width={32}          
-  height={32} 
+                width={120}
+                height={40}
                 alt={`${company.name} logo`}
                 className="h-8 md:h-10 w-auto opacity-60 hover:opacity-100 transition-opacity"
               />

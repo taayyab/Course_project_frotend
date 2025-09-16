@@ -12,13 +12,13 @@ export function Header() {
             <Input placeholder="Search your course here..." className="pl-10 bg-gray-50 border-gray-200" />
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        {/* <div className="flex items-center gap-4">
           <Bell className="w-5 h-5 text-gray-600" />
           <Avatar className="w-8 h-8">
             <AvatarImage src="/placeholder-user.jpg" />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
-        </div>
+        </div> */}
       </div>
     </div>
   )

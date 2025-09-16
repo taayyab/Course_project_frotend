@@ -1,6 +1,7 @@
 import { Button } from "@/components/admin/ui/button"
 import { CheckCircle, BookOpen, Users } from "lucide-react"
 import Image from "next/image"
+import forStudents from "@/public/forStudents.svg";
 import Link from "next/link"
 export default function ForStudentsSection() {
   return (
@@ -52,7 +53,7 @@ export default function ForStudentsSection() {
           <div className="relative">
             <div className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl p-6 relative overflow-hidden">
               <Image
-                src="/forStudents.svg"     
+                src={forStudents}     
                 alt="Logo"          
                 width={600}          
                 height={500}          

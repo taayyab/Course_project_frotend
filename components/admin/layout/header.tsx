@@ -27,13 +27,13 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
+        {/* <div className="flex items-center space-x-4">
           <NotificationsDropdown />
           <Avatar className="w-8 h-8">
             <AvatarImage src="/placeholder.svg?height=32&width=32" />
             <AvatarFallback className="bg-[#ff9500] text-white">U</AvatarFallback>
           </Avatar>
-        </div>
+        </div> */}
       </div>
     </header>
   )

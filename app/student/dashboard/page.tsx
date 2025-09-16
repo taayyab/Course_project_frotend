@@ -9,12 +9,16 @@ import { Badge } from "@/components/student/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { getDashboardStats, getCurrentlyEnrolledCourses, getCourses } from "@/lib/student.api";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { getSubscriptions } from "@/lib/subscriptions.api";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
   const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
   const [browseCourses, setBrowseCourses] = useState<any[]>([]);
   const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,13 +30,32 @@ export default function DashboardPage() {
         setEnrolledCourses(enrolledData);
 
         const browseData = await getCourses(token);
-setBrowseCourses(browseData.slice(0, 2));
+        setBrowseCourses(browseData.slice(0, 2));
       } catch (err) {
         console.error("Failed to fetch dashboard data", err);
       }
     };
     fetchData();
   }, [token]);
+
+  // useEffect(() => {
+  //   async function checkSubscription() {
+  //     if (!token) return;
+  //     try {
+  //       const subRes = await getSubscriptions(token);
+  //       // Find the active subscription for the current user
+  //       const subscription = subRes?.payload?.subscriptions?.find(
+  //         (sub: any) => sub.status === "approved"
+  //       );
+  //       if (!subscription) {
+  //         router.push("/student/signup");
+  //       }
+  //     } catch (err) {
+  //       router.push("/student/signup");
+  //     }
+  //   }
+  //   checkSubscription();
+  // }, [token, router]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -195,7 +218,32 @@ setBrowseCourses(browseData.slice(0, 2));
 
       {/* Right Sidebar stays unchanged */}
       <div className="space-y-6">
-<Card> <CardHeader> <CardTitle className="text-lg">Quick Actions</CardTitle> </CardHeader> <CardContent className="space-y-3"> <Link href="/student/dashboard/all-courses"> <Button variant="ghost" className="w-full justify-start text-gray-600 cursor-pointer"> Browse New Courses </Button></Link> <Link href="/student/dashboard/profile"> <Button variant="ghost" className="w-full justify-start text-gray-600 cursor-pointer"> Update Profile </Button></Link> <Link href="/student/dashboard/job-board"> <Button variant="ghost" className="w-full justify-start text-gray-600 cursor-pointer"> Find Jobs </Button></Link> </CardContent> </Card>      </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Link href="/student/dashboard/all-courses">
+              <Button variant="ghost" className="w-full justify-start text-gray-600 cursor-pointer">
+                {" "}
+                Browse New Courses{" "}
+              </Button>
+            </Link>
+            <Link href="/student/dashboard/profile">
+              <Button variant="ghost" className="w-full justify-start text-gray-600 cursor-pointer">
+                {" "}
+                Update Profile{" "}
+              </Button>
+            </Link>
+            <Link href="/student/dashboard/job-board">
+              <Button variant="ghost" className="w-full justify-start text-gray-600 cursor-pointer">
+                {" "}
+                Find Jobs{" "}
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

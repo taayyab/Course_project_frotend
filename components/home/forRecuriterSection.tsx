@@ -1,5 +1,6 @@
 import { Button } from "@/components/admin/ui/button"
 import { CheckCircle, Filter, MessageSquare } from "lucide-react"
+import forrecuriter from "@/public/forrecuriter.svg";
 import Image from "next/image"
 import Link from "next/link"
 export default function ForRecruitersSection() {
@@ -36,7 +37,7 @@ export default function ForRecruitersSection() {
           <div className="relative">
             <div className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl p-6 relative overflow-hidden">
               <Image
-                src="/forrecuriter.svg"      
+                src={forrecuriter}     
                 alt="Logo"          
                 width={600}          
                 height={500}          

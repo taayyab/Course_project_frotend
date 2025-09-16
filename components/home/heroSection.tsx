@@ -1,5 +1,12 @@
 import { Button } from "@/components/admin/ui/button"
 import { Play } from "lucide-react"
+import hero1 from "@/public/hero (1).png";
+import hero4 from "@/public/hero (4).png";
+import hero3 from "@/public/hero (3).png";
+import hero5 from "@/public/hero (5).png";
+import hero6 from "@/public/hero (6).png";
+import hero7 from "@/public/hero (7).png";
+import Image from "next/image";
 import Link from "next/link"
 export default function HeroSection() {
   return (
@@ -68,49 +75,67 @@ export default function HeroSection() {
               <div className="relative bg-gray-100 rounded-xl overflow-hidden aspect-video">
                 {/* Video thumbnail grid */}
                 <div className="grid grid-cols-3 gap-1 h-full">
-                  <img
-                    src="/hero (1).png?height=200&width=300"
+                  <Image
+                    src={hero1}
                     alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (6).png?height=200&width=300"
-                    alt="Teacher in classroom"
+                  <Image
+                    src={hero6}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (3).png?height=200&width=300"
-                    alt="Business meeting"
+                  <Image
+                    src={hero3}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (4).png?height=200&width=300"
-                    alt="Woman teaching"
+                  <Image
+                    src={hero4}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (5).png?height=200&width=300"
-                    alt="Man coding"
+                  <Image
+                    src={hero5}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (6).png?height=200&width=300"
-                    alt="Computer lab"
+                  <Image
+                    src={hero6}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (7).png?height=200&width=300"
-                    alt="Online learning"
+                  <Image
+                    src={hero7}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (6).png?height=200&width=300"
-                    alt="Graduation"
+                  <Image
+                    src={hero6}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
-                  <img
-                    src="/hero (7).png?height=200&width=300"
-                    alt="Professional working"
+                  <Image
+                    src={hero7}
+                    alt="Student learning"
+                    width={300}
+                    height={200}
                     className="w-full h-full object-cover"
                   />
                 </div>

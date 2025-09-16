@@ -120,14 +120,14 @@ function Topbar() {
             aria-label="Search"
           />
         </div>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        {/* <Button variant="ghost" size="icon" className="rounded-full">
           <Bell className="h-5 w-5 text-[#3f3f3f]" />
           <span className="sr-only">Notifications</span>
         </Button>
         <Avatar className="h-9 w-9 ring-2 ring-[#e6e7ef]">
           <AvatarImage src="/placeholder.svg?height=80&width=80" alt="User avatar" />
           <AvatarFallback>JD</AvatarFallback>
-        </Avatar>
+        </Avatar> */}
       </div>
     </header>
   )

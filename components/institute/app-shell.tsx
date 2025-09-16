@@ -114,13 +114,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   defaultValue=""
                 />
               </div>
-              <div className="ml-4 flex items-center gap-2">
+              {/* <div className="ml-4 flex items-center gap-2">
                 <NotificationBell />
                 <Avatar className="ml-2 h-8 w-8 ring-2 ring-[#e9ebee]">
                   <AvatarImage src="/placeholder.svg?height=64&width=64" alt="User" />
                   <AvatarFallback>SC</AvatarFallback>
                 </Avatar>
-              </div>
+              </div> */}
             </div>
           </header>
           {children}

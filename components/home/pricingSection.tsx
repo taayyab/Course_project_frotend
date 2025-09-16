@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function PricingSection() {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+  const billingCycle = "monthly";
   const router = useRouter();
 
   const plans = [
@@ -29,7 +29,7 @@ export default function PricingSection() {
     {
       id: "school-plan-id",
       name: "Training Institutes",
-      price: billingCycle === "monthly" ? 299.99 : 2999.99,
+      price: billingCycle === "monthly" ? 29.99 : 29.99,
       period: billingCycle === "monthly" ? "/month" : "/year",
       isPopular: true,
       features: [
@@ -82,26 +82,11 @@ export default function PricingSection() {
           <p className="text-gray-600 mb-8">Choose the plan that fits your needs.</p>
 
           <div className="inline-flex bg-white rounded-full p-1 shadow-sm border">
-            <button
-              onClick={() => setBillingCycle("monthly")}
-              className={`px-6 py-2 rounded-full text-sm font-medium ${
-                billingCycle === "monthly" ? "bg-blue-600 text-white" : "text-gray-600"
-              }`}
-            >
-              MONTHLY
-            </button>
-            <button
-              onClick={() => setBillingCycle("yearly")}
-              className={`px-6 py-2 rounded-full text-sm font-medium ${
-                billingCycle === "yearly" ? "bg-blue-600 text-white" : "text-gray-600"
-              }`}
-            >
-              YEARLY
-            </button>
+            <span className="px-6 py-2 rounded-full text-sm font-medium bg-blue-600 text-white">MONTHLY</span>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {plans.map((plan) => (
             <div key={plan.name} className="p-8 border rounded-2xl bg-white shadow-md">
               <div className="text-center mb-8">

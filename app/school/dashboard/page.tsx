@@ -10,6 +10,9 @@ import {
 import { AppShell } from "@/components/institute/app-shell";
 import { StatCard } from "@/components/institute/stat-card";
 import { getDashboardAnalytics } from "@/lib/school.api";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { getSubscriptions } from "@/lib/subscriptions.api";
 
 interface Analytics {
   totalEnrollments: number;
@@ -18,10 +21,11 @@ interface Analytics {
   activeCourses: number;
 }
 
-
 export default function Page() {
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [loading, setLoading] = useState(true);
+  const { token } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -33,6 +37,24 @@ export default function Page() {
 
     fetchAnalytics();
   }, []);
+
+  // useEffect(() => {
+  //   async function checkSubscription() {
+  //     if (!token) return;
+  //     try {
+  //       const subRes = await getSubscriptions(token);
+  //       const subscription = subRes?.payload?.subscriptions?.find(
+  //         (sub: any) => sub.status === "approved"
+  //       );
+  //       if (!subscription) {
+  //         router.push("/school/signup");
+  //       }
+  //     } catch (err) {
+  //       router.push("/school/signup");
+  //     }
+  //   }
+  //   checkSubscription();
+  // }, [token, router]);
 
   return (
     <AppShell>

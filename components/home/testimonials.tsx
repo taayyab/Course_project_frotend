@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-
+import testimonial2 from "@/public/testimonial2.png";
 const testimonials = [
   {
     id: 1,

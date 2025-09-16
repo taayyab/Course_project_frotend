@@ -1,5 +1,6 @@
 import { Button } from "@/components/admin/ui/button"
 import { Users, TrendingUp, Award } from "lucide-react"
+import fortraining from "@/public/fortraining.svg";
 import Image from "next/image"
 import Link from "next/link"
 export default function ForTrainingInstitutesSection() {
@@ -10,7 +11,7 @@ export default function ForTrainingInstitutesSection() {
           <div className="relative">
             <div className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl p-6 relative overflow-hidden">
               <Image
-                src="/fortraining.svg"      // Path to your image
+                src={fortraining}      // Path to your image
                 alt="Logo"           // Alt text for accessibility
                 width={600}           // Width in pixels
                 height={500}          // Height in pixels

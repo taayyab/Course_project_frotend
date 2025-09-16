@@ -77,6 +77,10 @@ const logout = async () => {
   Cookies.remove("user");
   localStorage.removeItem("user");
   localStorage.removeItem("token");
+  localStorage.removeItem("subscriptionId");
+  localStorage.removeItem("planId");
+  localStorage.removeItem("planPrice");
+  localStorage.removeItem("userRole");
   setToken(null);
   setUser(null);
   window.location.href = "/";

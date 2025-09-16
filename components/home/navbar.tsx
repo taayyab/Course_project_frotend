@@ -1,5 +1,5 @@
 "use client"
-
+import Logo from "@/public/logo.png";
 import { useState } from "react"
 import { Button } from "@/components/admin/ui/button"
 import { Menu, X } from "lucide-react"
@@ -16,7 +16,7 @@ export default function Navbar() {
         <div className="flex items-center space-x-2">
           <div className="w-18 h-18  rounded-full flex items-center justify-center">
             <Image
-              src="/logo.svg"      // Path to your image
+              src={Logo}      // Path to your image
               alt="Logo"           // Alt text for accessibility
               width={132}           // Width in pixels
               height={132}          // Height in pixels

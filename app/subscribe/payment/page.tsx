@@ -77,7 +77,7 @@ function CheckoutForm({
         <h3 className="text-lg font-semibold mb-2">Payment Details</h3>
         <div className="flex justify-between text-sm mb-1">
           <span>Plan:</span>
-          <span className="font-medium">{role.charAt(0).toUpperCase() + role.slice(1)}</span>
+          <span className="font-medium"> {role ? role.charAt(0).toUpperCase() + role.slice(1) : "N/A"}</span>
         </div>
         <div className="flex justify-between text-sm mb-1">
           <span>Amount:</span>
@@ -107,16 +107,42 @@ function CheckoutForm({
 }
 
 export default function PaymentPage({
-  role,
-  planId,
-  planPrice,
+  role: initialRole,
+  planId: initialPlanId,
+  planPrice: initialPlanPrice,
 }: {
-  role: string;
-  planId: string;
-  planPrice: number;
+  role?: string;
+  planId?: string;
+  planPrice?: number;
 }) {
   const router = useRouter();
   const { token } = useAuth();
+
+  // Use state for role, planId, planPrice
+  const [role, setRole] = useState<string | undefined>(initialRole);
+  const [planId, setPlanId] = useState<string | undefined>(initialPlanId);
+  const [planPrice, setPlanPrice] = useState<number | undefined>(initialPlanPrice);
+
+  useEffect(() => {
+    // Save to localStorage if present
+    if (initialRole) localStorage.setItem("userRole", initialRole);
+    if (initialPlanId) localStorage.setItem("planId", initialPlanId);
+    if (initialPlanPrice !== undefined) localStorage.setItem("planPrice", initialPlanPrice.toString());
+
+    // Restore from localStorage if missing
+    if (!role) {
+      const storedRole = localStorage.getItem("userRole");
+      if (storedRole) setRole(storedRole);
+    }
+    if (!planId) {
+      const storedPlanId = localStorage.getItem("planId");
+      if (storedPlanId) setPlanId(storedPlanId);
+    }
+    if (!planPrice) {
+      const storedPlanPrice = localStorage.getItem("planPrice");
+      if (storedPlanPrice) setPlanPrice(Number(storedPlanPrice));
+    }
+  }, [initialRole, initialPlanId, initialPlanPrice, role, planId, planPrice]);
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
@@ -130,15 +156,26 @@ export default function PaymentPage({
           return;
         }
 
-   
-        const subRes = await createSubscription(planId, token);
-        const subId =
-          subRes?.payload?.subscription?._id ||
-          subRes?.payload?.subscription?.id;
-        if (!subId) throw new Error("No subscriptionId returned");
+        // Try to get subscriptionId from localStorage first
+        let subId = localStorage.getItem("subscriptionId");
+
+        if (!subId) {
+          // If not found, create subscription and save to localStorage
+          const subRes = await createSubscription(planId, token);
+          const subscriptionObj = subRes?.payload?.subscription;
+          console.log("Subscription object:", subscriptionObj);
+
+          subId = subscriptionObj?._id || subscriptionObj?.id;
+          if (!subId) {
+            console.error("No subscriptionId found in:", subscriptionObj);
+            throw new Error("No subscriptionId returned");
+          }
+          localStorage.setItem("subscriptionId", subId);
+        }
+
         setSubscriptionId(subId);
 
-
+        // Always create payment intent with the subscriptionId
         const intentRes = await createPaymentIntent(subId, token);
         const secret =
           intentRes?.payload?.clientSecret || intentRes?.clientSecret;

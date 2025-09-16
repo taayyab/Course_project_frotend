@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     '/',
     '/school/login', '/school/signup', '/subscribe/payment',
     '/student/login', '/student/signup', '/subscribe/payment',
-    '/employer/login', '/employer/signup'
+    '/employer/login', '/employer/signup','/admin/login',
   ];
   const roleDashboards: { [key: string]: string } = {
     admin: '/admin/dashboard',

@@ -61,23 +61,20 @@ export default function Navbar() {
             <a href="#" className="hover:text-blue-200 transition-colors">
               Home
             </a>
-            <a href="#" className="hover:text-blue-200 transition-colors">
-              Courses
+          <a href="#testimonials" className="hover:text-blue-200 transition-colors">
+              Testimonials
             </a>
-            <a href="#" className="hover:text-blue-200 transition-colors">
-              Careers
+          <a href="#pricing" className="hover:text-blue-200 transition-colors">
+              Pricing
             </a>
-            <a href="#" className="hover:text-blue-200 transition-colors">
-              Blog
+          <a href="#faqs" className="hover:text-blue-200 transition-colors">
+              FAQS
             </a>
-            <a href="#" className="hover:text-blue-200 transition-colors">
-              About Us
-            </a>
+         
             <div className="flex flex-col space-y-2 pt-4">
-              <Button variant="ghost" className="text-white hover:bg-blue-700 hover:text-white justify-start">
-                Login
-              </Button>
-              <Button className="bg-white text-blue-600 hover:bg-blue-50 justify-start">Sign Up</Button>
+                        <a href="#pricing" className="hover:text-blue-200 transition-colors">
+
+              <Button className="bg-white text-blue-600 hover:bg-blue-50 justify-start">Sign Up</Button></a>
             </div>
           </div>
         </div>

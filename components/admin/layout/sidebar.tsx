@@ -30,8 +30,6 @@ const navigationItems = [
       { name: "Dashboard", href: "/admin/dashboard", icon: BarChart3 },
       { name: "User Management", href: "/admin/dashboard/user-management", icon: Users },
       { name: "Course Oversight", href: "/admin/dashboard/course-oversight", icon: BookOpen },
-      { name: "Hiring Supervision", href: "/admin/dashboard/hiring-supervision", icon: Briefcase },
-      { name: "Financial Control", href: "/admin/dashboard/financial-control", icon: DollarSign },
       { name: "Security & Compliance", href: "/admin/dashboard/security", icon: Shield },
       { name: "Communication", href: "/admin/dashboard/communication", icon: MessageSquare },
       { name: "Queries & Support", href: "/admin/dashboard/support", icon: HelpCircle },

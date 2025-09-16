@@ -33,9 +33,11 @@ export default function FooterCTASection() {
               Join thousands of students, institutes, and Employers who are already building the future of work
               together.
             </p>
+                      <a href="#pricing" className="hover:text-blue-200 transition-colors">
+
             <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 hover:scale-105 shadow-lg">
               Join Now →
-            </button>
+            </button></a>
           </div>
 
           {/* Right Navigation */}
@@ -48,22 +50,22 @@ export default function FooterCTASection() {
                 Home
               </a>
               <a
-                href="#"
+                href="#testimonials"
                 className="block text-white hover:text-blue-200 transition-colors duration-200 text-lg font-medium"
               >
-                Courses
+                Testimonials
               </a>
               <a
-                href="#"
+                href="#pricing"
                 className="block text-white hover:text-blue-200 transition-colors duration-200 text-lg font-medium"
               >
-                Careers
+                Pricing
               </a>
               <a
-                href="#"
+                href="#faqs"
                 className="block text-white hover:text-blue-200 transition-colors duration-200 text-lg font-medium"
               >
-                Blog
+                FAQS
               </a>
               <a
                 href="#"

@@ -54,7 +54,7 @@ function AppSidebar() {
 
       <div className="px-3 mt-8">
         <SectionLabel>SETTINGS</SectionLabel>
-        <SidebarLink href="/employer/settings" active={pathname?.startsWith("/settings") || false} icon={<Settings className="h-4 w-4 cursor-pointer" />} label="Settings" />
+        <SidebarLink href="/employer/settings" active={pathname?.startsWith("/Profile") || false} icon={<Settings className="h-4 w-4 cursor-pointer" />} label="Settings" />
         <Button
           variant="ghost"
           className="flex items-center gap-3 rounded-md px-2 py-2 text-sm text-[#f13e3e] hover:bg-[#e9eefb] w-full justify-start"

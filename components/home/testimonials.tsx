@@ -85,21 +85,18 @@ export default function TestimonialsSection() {
           What Our Learners Say About Us
         </h2>
 
-        <div className="relative overflow-hidden">
-          {/* Testimonials Container with sliding effect */}
-          <div
-            className="flex justify-center items-center gap-8 mb-12 transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * 33.333}%)` }}
-          >
-            {testimonials.map((testimonial, index) => (
+        <div className="relative">
+          {/* Testimonials Container */}
+          <div className="flex justify-center items-center gap-8 mb-12">
+            {getVisibleTestimonials().map((testimonial, index) => (
               <div
                 key={testimonial.id}
-                className={`relative min-w-[33.333%] transition-all duration-700 ease-in-out ${
-                  index === currentIndex + 1 ? "scale-110 z-10" : "scale-95 opacity-75"
+                className={`relative transition-all duration-500 ease-in-out ${
+                  index === 1 ? "scale-110 z-10" : "scale-95 opacity-75"
                 }`}
               >
                 {/* Speech Bubble */}
-                <div className="relative bg-white rounded-3xl p-8 shadow-lg max-w-sm mx-auto">
+                <div className="relative bg-white rounded-3xl p-8 shadow-lg max-w-sm">
                   {/* Blue curved accent */}
                   <div className="absolute -bottom-4 left-8 w-16 h-16">
                     <svg viewBox="0 0 64 64" className="w-full h-full">

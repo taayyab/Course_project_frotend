@@ -58,9 +58,7 @@ export function TalentRequestCard({ job }: TalentRequestCardProps) {
           </div>
         </CardContent>
         <CardFooter className="justify-end gap-3">
-          <Button variant="secondary" className="rounded-full bg-[#eef5ff] text-[#0a60ff]">
-            Match Students
-          </Button>
+         
           <Button className="rounded-full" onClick={() => setShowDetails(true)}>
             View Details
           </Button>

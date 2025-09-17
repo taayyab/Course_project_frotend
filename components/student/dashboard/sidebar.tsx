@@ -33,8 +33,6 @@ export function Sidebar({ className }: SidebarProps) {
     {
       section: "ACCOUNT",
       items: [
-        { icon: Bell, label: "Notifications", href: "/student/dashboard/notifications" },
-        { icon: BookOpen, label: "Subscription", href: "/student/dashboard/subscription" },
         { icon: BookOpen, label: "Help & Support", href: "/student/dashboard/help" },
       ],
     },

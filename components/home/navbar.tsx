@@ -42,10 +42,9 @@ export default function Navbar() {
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          <Button variant="ghost" className="text-white hover:bg-blue-700 hover:text-white">
-            Login
-          </Button>
-          <Button className="bg-white text-blue-600 hover:bg-blue-50">Sign Up</Button>
+                  <a href="#pricing" className="hover:text-blue-200 transition-colors">
+
+          <Button className="bg-white text-blue-600 hover:bg-blue-50">Sign Up</Button></a>
         </div>
 
         {/* Mobile Menu Button */}

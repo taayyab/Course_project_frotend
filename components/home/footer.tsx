@@ -67,12 +67,7 @@ export default function FooterCTASection() {
               >
                 FAQS
               </a>
-              <a
-                href="#"
-                className="block text-white hover:text-blue-200 transition-colors duration-200 text-lg font-medium"
-              >
-                About Us
-              </a>
+            
             </nav>
           </div>
         </div>

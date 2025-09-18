@@ -36,8 +36,8 @@ export default function AuthForm({ role, type }: AuthFormProps) {
         return;
       }
       // Phone number length and digits
-      if (!/^\d{11,}$/.test(phone)) {
-        setError("Phone number must be more than 10 digits.");
+      if (!/^\d{10,}$/.test(phone)) {
+        setError("Phone number must be at least 10 digits.");
         return;
       }
       // Email format
@@ -51,7 +51,6 @@ export default function AuthForm({ role, type }: AuthFormProps) {
     try {
       if (type === "signup") {
         await signup(role, fullName, email, phone, password);
-        // Auto-login immediately to get token (backend signin)
         const data = await signin(email, password);
         const accessToken = data.data.payload.accessToken;
         const user = data.data.payload.user;

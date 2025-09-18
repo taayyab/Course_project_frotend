@@ -27,6 +27,26 @@ export default function AuthForm({ role, type }: AuthFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Client-side validations
+    if (type === "signup") {
+      // Password length
+      if (password.length < 6) {
+        setError("Password must be at least 6 characters.");
+        return;
+      }
+      // Phone number length and digits
+      if (!/^\d{11,}$/.test(phone)) {
+        setError("Phone number must be more than 10 digits.");
+        return;
+      }
+      // Email format
+      if (!/^\S+@\S+\.\S+$/.test(email)) {
+        setError("Please enter a valid email address.");
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       if (type === "signup") {
@@ -42,6 +62,17 @@ export default function AuthForm({ role, type }: AuthFormProps) {
           router.push(`/${role}/payment`);
         }
       } else {
+        // Signin validations
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          setError("Please enter a valid email address.");
+          setLoading(false);
+          return;
+        }
+        if (password.length < 6) {
+          setError("Password must be at least 6 characters.");
+          setLoading(false);
+          return;
+        }
         const data = await signin(email, password);
         login(data.data.payload.accessToken, data.data.payload.user);
         const userRole = data.data.payload.user?.role || role;
@@ -55,6 +86,8 @@ export default function AuthForm({ role, type }: AuthFormProps) {
           setError("Incorrect email or password.");
         } else if (msg.includes("exists")) {
           setError("Email already exists. Please use a different email or sign in.");
+        } else if (msg.includes("email")) {
+          setError("Please enter a valid email address.");
         } else {
           setError(err.response.data.message);
         }

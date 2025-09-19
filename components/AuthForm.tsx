@@ -103,7 +103,7 @@ export default function AuthForm({ role, type }: AuthFormProps) {
       <Card className="w-full max-w-xl shadow-sm rounded-2xl">
         <CardContent className="p-10">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-[#1e242c]">TalentBridge</h1>
+            <h1 className="text-2xl font-semibold text-[#1e242c]">Apprenticeships Hub</h1>
             <p className="text-[#696984] cursor-pointer">
               {role.charAt(0).toUpperCase() + role.slice(1)}{" "}
               {type === "signup" ? "Sign Up" : "Sign In"}

@@ -29,7 +29,7 @@ export default function PricingSection() {
     {
       id: "school-plan-id",
       name: "Training Institutes",
-      price: billingCycle === "monthly" ? 29.99 : 29.99,
+      price: billingCycle === "monthly" ? 299.99 : 29.99,
       period: billingCycle === "monthly" ? "/month" : "/year",
       isPopular: true,
       features: [

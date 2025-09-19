@@ -32,7 +32,7 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              SkillBridge connects students with top training programs and employers in one platform. Build skills, get
+              Apprenticeships Hub connects students with top training programs and employers in one platform. Build skills, get
               certified, and land your dream job.
             </p>
 

@@ -18,8 +18,8 @@ export default function Navbar() {
             <Image
               src={Logo}      // Path to your image
               alt="Logo"           // Alt text for accessibility
-              width={332}           // Width in pixels
-              height={332}          // Height in pixels
+              width={202}           // Width in pixels
+              height={200}          // Height in pixels
             />          </div>
         </div>
 

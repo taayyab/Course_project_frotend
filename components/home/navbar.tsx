@@ -14,7 +14,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <div className="w-full h-full  rounded-full flex items-center justify-center">
+          <div className="w-44 h-44  rounded-full flex items-center justify-center">
             <Image
               src={Logo}      // Path to your image
               alt="Logo"           // Alt text for accessibility
